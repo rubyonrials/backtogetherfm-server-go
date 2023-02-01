@@ -9,9 +9,6 @@ import (
     "github.com/google/uuid"
 )
 
-const ApiKey = "devkey"
-const ApiSecret = "secret"
-
 func issueTokens(w http.ResponseWriter, r *http.Request) {
     tokens := make(map[string]string)
     redToken, err1 := getJoinToken("red");
@@ -25,6 +22,8 @@ func issueTokens(w http.ResponseWriter, r *http.Request) {
     }
 
     w.Header().Set("Content-Type", "application/json")
+    w.Header().Set("Access-Control-Allow-Origin", "*")
+    w.Header().Set("Access-Control-Allow-Headers", "*")
     json.NewEncoder(w).Encode(tokens)
 }
 
@@ -32,7 +31,7 @@ func getJoinToken(room string) (string, error) {
     canPublish := true
     canSubscribe := true
 
-    at := auth.NewAccessToken(ApiKey, ApiSecret)
+    at := auth.NewAccessToken(process.env.LIVEKIT_API_KEY, process.env.LIVEKIT_API_SECRET)
     grant := &auth.VideoGrant{
         RoomJoin:     true,
         Room:         room,
