@@ -1,6 +1,7 @@
 package main
 
 import (
+    "os"
     "log"
     "net/http"
     "time"
@@ -31,7 +32,7 @@ func getJoinToken(room string) (string, error) {
     canPublish := true
     canSubscribe := true
 
-    at := auth.NewAccessToken(process.env.LIVEKIT_API_KEY, process.env.LIVEKIT_API_SECRET)
+    at := auth.NewAccessToken(os.Getenv("LIVEKIT_API_KEY"), os.Getenv("LIVEKIT_API_SECRET"))
     grant := &auth.VideoGrant{
         RoomJoin:     true,
         Room:         room,
